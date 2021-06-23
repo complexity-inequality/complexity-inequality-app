@@ -1,0 +1,2 @@
+default:
+  mongoURL: 'mongodb+srv://guigo:LetsMongo@cluster0.eqkem.mongodb.net/'

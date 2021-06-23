@@ -1,0 +1,144 @@
+CONTAINER ID   IMAGE          COMMAND   CREATED        STATUS       PORTS                                       NAMES
+92d6d4706acd   4fc3047afdf3   "/init"   5 months ago   Up 5 hours   0.0.0.0:8787->8787/tcp, :::8787->8787/tcp   rstudio_container
+building image...
+Sending build context to Docker daemon  8.185GB
+Step 1/17 : FROM rocker/shiny:latest
+ ---> a700fbae0c61
+Step 2/17 : LABEL mantainer=guilhermeviegas1993@gmail.com
+ ---> Using cache
+ ---> 1ef6f0add3e8
+Step 3/17 : RUN apt-get update && apt-get install -y   sudo   pandoc   pandoc-citeproc   libcurl4-gnutls-dev   libcairo2-dev   libxt-dev   libssl-dev   libssh2-1-dev   xorg-dev   libxml2-dev   libmpfr-dev   libsasl2-dev   libudunits2-dev   libgdal-dev
+ ---> Using cache
+ ---> 83a9dcab6c4b
+Step 4/17 : RUN apt-get update &&   apt-get upgrade -y &&   apt-get clean
+ ---> Using cache
+ ---> f27c3d7e09ab
+Step 5/17 : RUN R -e "install.packages(c('shiny', 'rmarkdown'), repos='https://cloud.r-project.org/')" # main libs
+ ---> Using cache
+ ---> a83d694a0c02
+Step 6/17 : RUN R -e "install.packages(c('XML', 'devtools', 'bit64', 'xtable'))" # dev libs
+ ---> Using cache
+ ---> 9fae89afe20b
+Step 7/17 : RUN R -e "install.packages(c('readr', 'rio'))" # load libs
+ ---> Using cache
+ ---> 8ca5dab6c228
+Step 8/17 : RUN R -e "install.packages(c('dplyr', 'plyr', 'janitor'))" # Treatment libs
+ ---> Using cache
+ ---> 4cb8cb79e00f
+Step 9/17 : RUN R -e "install.packages(c('ggplot2'))" # viz libs
+ ---> Using cache
+ ---> cb535aa267a7
+Step 10/17 : RUN R -e "install.packages(c('shinydashboard'))"
+ ---> Using cache
+ ---> 4b8cd15b530d
+Step 11/17 : RUN R -e "install.packages(c('config'))"
+ ---> Using cache
+ ---> 9cc15e6b8b43
+Step 12/17 : RUN R -e "install.packages(c('shinyWidgets'))"
+ ---> Running in 2ee233af81ac
+
+R version 4.0.5 (2021-03-31) -- "Shake and Throw"
+Copyright (C) 2021 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> install.packages(c('shinyWidgets'))
+[91mInstalling package into ‘/usr/local/lib/R/site-library’
+(as ‘lib’ is unspecified)
+[0m[91mtrying URL 'https://packagemanager.rstudio.com/all/__linux__/focal/latest/src/contrib/shinyWidgets_0.6.0.tar.gz'
+[0m[91mContent type 'binary/octet-stream' length 1359132 bytes (1.3 MB)
+[0m[91m=[0m[91m=[0m[91m=[0m[91m=[0m[91m=[0m[91m=[0m[91m=[0m[91m=[0m[91m=[0m[91m=[0m[91m=[0m[91m=[0m[91m=[0m[91m=[0m[91m=[0m[91m=[0m[91m=[0m[91m=[0m[91m=[0m[91m=[0m[91m=[0m[91m=[0m[91m=[0m[91m=[0m[91m=======[0m[91m=[0m[91m=[0m[91m=[0m[91m=[0m[91m=[0m[91m=[0m[91m=[0m[91m=[0m[91m=[0m[91m=========[0m[91m=
+downloaded 1.3 MB
+
+[0m[91m* installing *binary* package ‘shinyWidgets’ ...
+[0m[91m* DONE (shinyWidgets)
+[0m[91m
+The downloaded source packages are in
+	‘/tmp/Rtmpdp5zyK/downloaded_packages’
+[0m> 
+> 
+Removing intermediate container 2ee233af81ac
+ ---> b806cc1a8807
+Step 13/17 : COPY ./R ./R
+ ---> b3b2537ac1f1
+Step 14/17 : COPY ./conf ./conf
+ ---> 8fa6997e2583
+Step 15/17 : COPY ./data/options ./data/options
+ ---> f2b92cfa1fe3
+Step 16/17 : EXPOSE 3838
+ ---> Running in 836f9a0d4314
+Removing intermediate container 836f9a0d4314
+ ---> f35a29338be2
+Step 17/17 : CMD ["R", "-e", "shiny::runApp('./R', host = '0.0.0.0', port = 3838)"]
+ ---> Running in d5e84cf1727a
+Removing intermediate container d5e84cf1727a
+ ---> dd477184c943
+Successfully built dd477184c943
+Successfully tagged ic-shiny-app-v1:latest
+CONTAINER ID   IMAGE          COMMAND   CREATED        STATUS       PORTS                                       NAMES
+92d6d4706acd   4fc3047afdf3   "/init"   5 months ago   Up 5 hours   0.0.0.0:8787->8787/tcp, :::8787->8787/tcp   rstudio_container
+Running container...
+
+R version 4.0.5 (2021-03-31) -- "Shake and Throw"
+Copyright (C) 2021 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> shiny::runApp('./R', host = '0.0.0.0', port = 3838)
+Loading required package: shiny
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+
+Listening on http://0.0.0.0:3838
+
+── Column specification ────────────────────────────────────────────────────────
+cols(
+  cd_rg = col_double(),
+  sg_rg = col_character(),
+  nm_rg = col_character()
+)
+
+
+── Column specification ────────────────────────────────────────────────────────
+cols(
+  cd_tema = col_character(),
+  nm_tema = col_character(),
+  cd_stat = col_character(),
+  nm_stat = col_character()
+)
+
+Warning: Error in : Problem with `filter()` input `..1`.
+ℹ Input `..1` is `cd_tema == input$input_server_3`.
+✖ Input `..1` must be of size 105 or 1, not size 0.
+  115: <Anonymous>
