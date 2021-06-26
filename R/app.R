@@ -15,19 +15,19 @@ source(file = "./tab_more.R")
 ui <- shiny::shinyUI(
   shiny::fluidPage(
     shiny::navbarPage(
-      title = "Complexity-Inequality v:0.7", 
+      title = "Complexity-Inequality v:0.71", 
       id = "page_id", 
       selected = "app",
+      
       home,
+      
       shiny::tabPanel(
         title = "Membros",
         value = "members",
         shiny::fluidPage(
           shiny::column(
             width = 10, offset = 1,
-            shiny::h3("O grupo é constituído dos seguintes integrantes:"),
-            shiny::br(),
-            shiny::uiOutput(outputId = "authors_test") %>% shinycssloaders::withSpinner()
+            shiny::uiOutput(outputId = "members") %>% shinycssloaders::withSpinner()
           ),
         )
       ),
@@ -63,15 +63,16 @@ ui <- shiny::shinyUI(
             shiny::fluidRow(
               shiny::tabsetPanel(
                 shiny::tabPanel(title = "Distribuição espacial", shiny::plotOutput(outputId = "plot1") %>% shinycssloaders::withSpinner()),
-                # shiny::tabPanel(title = "geom_sf_interactive", ggiraph::girafeOutput(outputId = "plot2") %>% shinycssloaders::withSpinner()),
+                shiny::tabPanel(title = "geom_sf_interactive", ggiraph::girafeOutput(outputId = "plot2") %>% shinycssloaders::withSpinner()),
                 shiny::tabPanel(title = "Gráfico de densidade", shiny::plotOutput(outputId = "plot3") %>% shinycssloaders::withSpinner()),
                 shiny::tabPanel(title = "Tabela", shiny::fluidPage(br(), DT::dataTableOutput(outputId = "table1") %>% shinycssloaders::withSpinner()))
               )
             ),
+            br(),
             shinydashboard::box(
-              title = "Detalhes", 
+              title = "Informações adicionais", 
               background = "light-blue", 
-              solidHeader = F, 
+              solidHeader = T, 
               shiny::textOutput("info1")
             )
           ),
@@ -82,8 +83,12 @@ ui <- shiny::shinyUI(
       shiny::tabPanel(
         title = "Publicações", 
         value = "publications",
-        shiny::br(),
-        shiny::h5("Aqui será uma vitrine para as principais publicações dos integrantes do grupo relacionadas à complexidade economica e desigualdade")
+        shiny::fluidPage(
+          shiny::column(
+            width = 10, offset = 1,
+            shiny::uiOutput(outputId = "publications_ui") %>% shinycssloaders::withSpinner()
+          ),
+        )
       ),
       
       shiny::tabPanel(
@@ -222,20 +227,20 @@ server <- function(input, output){
   })
 
   output$plot2 <- ggiraph::renderGirafe({
-    # dfr1 <- react_df()
-    # rownames(dfr1) <- dfr1$cd_meso
-    # gg2 <- ggplot2::ggplot(dfr1,
-    #   ggplot2::aes(
-    #     fill=dfr1$value,
-    #     tooltip=dfr1$cd_meso,
-    #     data_id=dfr1$cd_meso
-    #   )
-    # )+
-    #   ggiraph::geom_sf_interactive(color="black", size=.2)+
-    #   ggplot2::scale_fill_gradient(low="white", high="blue")+
-    #   ggplot2::labs(title = "", caption = "", y = "Latitude", x = "Longitude")+
-    #   ggplot2::theme_void()
-    # ggiraph::girafe(ggobj = gg2)
+    dfr1 <- react_df()
+    rownames(dfr1) <- dfr1$cd_meso
+    gg2 <- ggplot2::ggplot(dfr1,
+      ggplot2::aes(
+        fill=dfr1$value,
+        tooltip=dfr1$cd_meso,
+        data_id=dfr1$cd_meso
+      )
+    )+
+      ggiraph::geom_sf_interactive(color="black", size=.2)+
+      ggplot2::scale_fill_gradient(low="white", high="blue")+
+      ggplot2::labs(title = "", caption = "", y = "Latitude", x = "Longitude")+
+      ggplot2::theme_void()
+    ggiraph::girafe(ggobj = gg2)
   })
 
   output$plot3 <- shiny::renderPlot({
@@ -261,12 +266,26 @@ server <- function(input, output){
     reac_query()
   })
   
-  output$authors_test <- shiny::renderUI({
-    df <- data.frame("nome"=c("Dominik Hartmann", "Guilherme Viegas"), "title"=c("Diretor", "TechLead"))
-    lapply(1:nrow(df), function(i) {
+  output$members <- shiny::renderUI({
+    bios <- readr::read_csv("../data/options/bios.csv")
+    lapply(1:nrow(bios), function(i) {
       shiny::div(
-        shiny::h4(df[i, "nome"]), 
-        shiny::h5(df[i, "title"]),
+        shiny::h3(bios[i, "nm"]), 
+        shiny::h5(bios[i, "en_title"]),
+        shiny::h6(bios[i, "en_desc"]),
+        shiny::br()
+      )
+    })
+  })
+  
+  output$publications_ui <- shiny::renderUI({
+    publications <- readr::read_csv("../data/options/publications.csv")
+    lapply(1:nrow(publications), function(i) {
+      shiny::div(
+        shiny::h3(publications[i, "title"]), 
+        shiny::h5(publications[i, "year"]), 
+        shiny::h5(publications[i, "authors"]),
+        shiny::h6(publications[i, "citation"]),
         shiny::br()
       )
     })

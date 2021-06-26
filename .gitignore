@@ -1,1 +1,6 @@
-data/
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+/data
+/conf

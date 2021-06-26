@@ -47,6 +47,7 @@ COPY ./R ./R
 COPY ./conf ./conf
 COPY ./data/options ./data/options
 COPY ./data/shp ./data/shp
+
 # RUN mkdir -p ~/R
 # COPY ./R ./app/R/
 ## renv.lock file

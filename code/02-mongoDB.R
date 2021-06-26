@@ -55,3 +55,25 @@ mongo_set$drop()
 
 
 
+
+# ICDB --------------------------------------------------------------------
+
+
+# mun
+mongo_credentials <- config::get(file = "conf/globalresources.yml")
+mongo_set <- mongo(db = "db1", collection = "colec_mun", url = mongo_credentials$mongoURL, verbose = TRUE)
+mongo(url = mongo_credentials$mongoURL)$run('{"listCollections":1}')$cursor$firstBatch %>% as_tibble()
+colec_mun <- mongo_set$find()
+product_input="eci_ref"
+df <- mongo_set$find(paste0('{"product" : ', paste0('"', product_input, '"'), '}'))
+
+# uf
+mongo_credentials <- config::get(file = "conf/globalresources.yml")
+mongo_set <- mongo(db = "db1", collection = "colec_uf", url = mongo_credentials$mongoURL, verbose = TRUE)
+mongo(url = mongo_credentials$mongoURL)$run('{"listCollections":1}')$cursor$firstBatch %>% as_tibble()
+colec_mun <- mongo_set$find()
+product_input="eci_ref"
+df <- mongo_set$find(paste0('{"product" : ', paste0('"', product_input, '"'), '}'))
+tail(df)
+rio::export(df, "df_uf_eci.csv")
+sapply(df, unique)
