@@ -15,7 +15,7 @@ source(file = "./tab_more.R")
 ui <- shiny::shinyUI(
   shiny::fluidPage(
     shiny::navbarPage(
-      title = "Complexity-Inequality v:0.71", 
+      title = "Complexity-Inequality v:0.72", 
       id = "page_id", 
       selected = "app",
       

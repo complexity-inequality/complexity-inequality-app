@@ -1,144 +1,171 @@
-CONTAINER ID   IMAGE          COMMAND   CREATED        STATUS       PORTS                                       NAMES
-92d6d4706acd   4fc3047afdf3   "/init"   5 months ago   Up 5 hours   0.0.0.0:8787->8787/tcp, :::8787->8787/tcp   rstudio_container
-building image...
-Sending build context to Docker daemon  8.185GB
-Step 1/17 : FROM rocker/shiny:latest
+ls ----------------------------------------------------------------------
+/home/guigo/Documents/projects_dir/08-complexity-inequality/complexity-inequality-app
+code
+complexity-inequality-app.Rproj
+conf
+data
+dockerfile
+R
+README.md
+README.txt
+start2.sh
+start.log
+start.sh
+try.sh
+www
+docker ps ---------------------------------------------------------------
+CONTAINER ID   IMAGE          COMMAND                  CREATED          STATUS             PORTS                                       NAMES
+83932fa952a8   ic-shiny-app   "R -e 'shiny::runApp…"   44 minutes ago   Up 44 minutes      0.0.0.0:3838->3838/tcp, :::3838->3838/tcp   determined_maxwell
+67ffba66d602   e0bffb4797a0   "/init"                  3 weeks ago      Up About an hour   0.0.0.0:8787->8787/tcp, :::8787->8787/tcp   rstudio_container_sp
+Setting Credentials -----------------------------------------------------
+docker build ------------------------------------------------------------
+WARNING! Using --password via the CLI is insecure. Use --password-stdin.
+WARNING! Your password will be stored unencrypted in /home/guigo/.docker/config.json.
+Configure a credential helper to remove this warning. See
+https://docs.docker.com/engine/reference/commandline/login/#credentials-store
+
+Login Succeeded
+Sending build context to Docker daemon  6.939GB
+Step 1/23 : FROM rocker/shiny:latest
  ---> a700fbae0c61
-Step 2/17 : LABEL mantainer=guilhermeviegas1993@gmail.com
+Step 2/23 : LABEL mantainer=guilhermeviegas1993@gmail.com
  ---> Using cache
  ---> 1ef6f0add3e8
-Step 3/17 : RUN apt-get update && apt-get install -y   sudo   pandoc   pandoc-citeproc   libcurl4-gnutls-dev   libcairo2-dev   libxt-dev   libssl-dev   libssh2-1-dev   xorg-dev   libxml2-dev   libmpfr-dev   libsasl2-dev   libudunits2-dev   libgdal-dev
+Step 3/23 : RUN apt-get update && apt-get install -y   sudo   pandoc   pandoc-citeproc   libcurl4-gnutls-dev   libcairo2-dev   libxt-dev   libssl-dev   libssh2-1-dev   xorg-dev   libxml2-dev   libmpfr-dev   libsasl2-dev   libudunits2-dev   libgdal-dev
  ---> Using cache
  ---> 83a9dcab6c4b
-Step 4/17 : RUN apt-get update &&   apt-get upgrade -y &&   apt-get clean
+Step 4/23 : RUN apt-get update &&   apt-get upgrade -y &&   apt-get clean
  ---> Using cache
  ---> f27c3d7e09ab
-Step 5/17 : RUN R -e "install.packages(c('shiny', 'rmarkdown'), repos='https://cloud.r-project.org/')" # main libs
+Step 5/23 : RUN R -e "install.packages(c('shiny', 'rmarkdown'), repos='https://cloud.r-project.org/')" # main libs
  ---> Using cache
  ---> a83d694a0c02
-Step 6/17 : RUN R -e "install.packages(c('XML', 'devtools', 'bit64', 'xtable'))" # dev libs
+Step 6/23 : RUN R -e "install.packages(c('XML', 'devtools', 'bit64', 'xtable'))" # dev libs
  ---> Using cache
  ---> 9fae89afe20b
-Step 7/17 : RUN R -e "install.packages(c('readr', 'rio'))" # load libs
+Step 7/23 : RUN R -e "install.packages(c('readr', 'rio'))" # load libs
  ---> Using cache
  ---> 8ca5dab6c228
-Step 8/17 : RUN R -e "install.packages(c('dplyr', 'plyr', 'janitor'))" # Treatment libs
+Step 8/23 : RUN R -e "install.packages(c('dplyr', 'plyr', 'janitor'))" # Treatment libs
  ---> Using cache
  ---> 4cb8cb79e00f
-Step 9/17 : RUN R -e "install.packages(c('ggplot2'))" # viz libs
+Step 9/23 : RUN R -e "install.packages(c('ggplot2'))" # viz libs
  ---> Using cache
  ---> cb535aa267a7
-Step 10/17 : RUN R -e "install.packages(c('shinydashboard'))"
+Step 10/23 : RUN R -e "install.packages(c('shinydashboard'))"
  ---> Using cache
  ---> 4b8cd15b530d
-Step 11/17 : RUN R -e "install.packages(c('config'))"
+Step 11/23 : RUN R -e "install.packages(c('config'))"
  ---> Using cache
  ---> 9cc15e6b8b43
-Step 12/17 : RUN R -e "install.packages(c('shinyWidgets'))"
- ---> Running in 2ee233af81ac
-
-R version 4.0.5 (2021-03-31) -- "Shake and Throw"
-Copyright (C) 2021 The R Foundation for Statistical Computing
-Platform: x86_64-pc-linux-gnu (64-bit)
-
-R is free software and comes with ABSOLUTELY NO WARRANTY.
-You are welcome to redistribute it under certain conditions.
-Type 'license()' or 'licence()' for distribution details.
-
-R is a collaborative project with many contributors.
-Type 'contributors()' for more information and
-'citation()' on how to cite R or R packages in publications.
-
-Type 'demo()' for some demos, 'help()' for on-line help, or
-'help.start()' for an HTML browser interface to help.
-Type 'q()' to quit R.
-
-> install.packages(c('shinyWidgets'))
-[91mInstalling package into ‘/usr/local/lib/R/site-library’
-(as ‘lib’ is unspecified)
-[0m[91mtrying URL 'https://packagemanager.rstudio.com/all/__linux__/focal/latest/src/contrib/shinyWidgets_0.6.0.tar.gz'
-[0m[91mContent type 'binary/octet-stream' length 1359132 bytes (1.3 MB)
-[0m[91m=[0m[91m=[0m[91m=[0m[91m=[0m[91m=[0m[91m=[0m[91m=[0m[91m=[0m[91m=[0m[91m=[0m[91m=[0m[91m=[0m[91m=[0m[91m=[0m[91m=[0m[91m=[0m[91m=[0m[91m=[0m[91m=[0m[91m=[0m[91m=[0m[91m=[0m[91m=[0m[91m=[0m[91m=======[0m[91m=[0m[91m=[0m[91m=[0m[91m=[0m[91m=[0m[91m=[0m[91m=[0m[91m=[0m[91m=[0m[91m=========[0m[91m=
-downloaded 1.3 MB
-
-[0m[91m* installing *binary* package ‘shinyWidgets’ ...
-[0m[91m* DONE (shinyWidgets)
-[0m[91m
-The downloaded source packages are in
-	‘/tmp/Rtmpdp5zyK/downloaded_packages’
-[0m> 
-> 
-Removing intermediate container 2ee233af81ac
+Step 12/23 : RUN R -e "install.packages(c('shinyWidgets'))"
+ ---> Using cache
  ---> b806cc1a8807
-Step 13/17 : COPY ./R ./R
- ---> b3b2537ac1f1
-Step 14/17 : COPY ./conf ./conf
- ---> 8fa6997e2583
-Step 15/17 : COPY ./data/options ./data/options
- ---> f2b92cfa1fe3
-Step 16/17 : EXPOSE 3838
- ---> Running in 836f9a0d4314
-Removing intermediate container 836f9a0d4314
- ---> f35a29338be2
-Step 17/17 : CMD ["R", "-e", "shiny::runApp('./R', host = '0.0.0.0', port = 3838)"]
- ---> Running in d5e84cf1727a
-Removing intermediate container d5e84cf1727a
- ---> dd477184c943
-Successfully built dd477184c943
-Successfully tagged ic-shiny-app-v1:latest
-CONTAINER ID   IMAGE          COMMAND   CREATED        STATUS       PORTS                                       NAMES
-92d6d4706acd   4fc3047afdf3   "/init"   5 months ago   Up 5 hours   0.0.0.0:8787->8787/tcp, :::8787->8787/tcp   rstudio_container
-Running container...
-
-R version 4.0.5 (2021-03-31) -- "Shake and Throw"
-Copyright (C) 2021 The R Foundation for Statistical Computing
-Platform: x86_64-pc-linux-gnu (64-bit)
-
-R is free software and comes with ABSOLUTELY NO WARRANTY.
-You are welcome to redistribute it under certain conditions.
-Type 'license()' or 'licence()' for distribution details.
-
-R is a collaborative project with many contributors.
-Type 'contributors()' for more information and
-'citation()' on how to cite R or R packages in publications.
-
-Type 'demo()' for some demos, 'help()' for on-line help, or
-'help.start()' for an HTML browser interface to help.
-Type 'q()' to quit R.
-
-> shiny::runApp('./R', host = '0.0.0.0', port = 3838)
-Loading required package: shiny
-
-Attaching package: ‘dplyr’
-
-The following objects are masked from ‘package:stats’:
-
-    filter, lag
-
-The following objects are masked from ‘package:base’:
-
-    intersect, setdiff, setequal, union
-
-
-Listening on http://0.0.0.0:3838
-
-── Column specification ────────────────────────────────────────────────────────
-cols(
-  cd_rg = col_double(),
-  sg_rg = col_character(),
-  nm_rg = col_character()
-)
-
-
-── Column specification ────────────────────────────────────────────────────────
-cols(
-  cd_tema = col_character(),
-  nm_tema = col_character(),
-  cd_stat = col_character(),
-  nm_stat = col_character()
-)
-
-Warning: Error in : Problem with `filter()` input `..1`.
-ℹ Input `..1` is `cd_tema == input$input_server_3`.
-✖ Input `..1` must be of size 105 or 1, not size 0.
-  115: <Anonymous>
+Step 13/23 : RUN R -e "install.packages(c('sf'))"
+ ---> Using cache
+ ---> 9ac693b106e6
+Step 14/23 : RUN R -e "install.packages(c('ggiraph'))"
+ ---> Using cache
+ ---> ff48aef14983
+Step 15/23 : RUN R -e "install.packages(c('mongolite'))"
+ ---> Using cache
+ ---> 3c0b25aa1360
+Step 16/23 : RUN R -e "install.packages(c('shinycssloaders'))"
+ ---> Using cache
+ ---> ce5ed7b14878
+Step 17/23 : RUN R -e "install.packages(c('DT'))"
+ ---> Using cache
+ ---> 0c0e7425f1f4
+Step 18/23 : COPY ./R ./R
+ ---> Using cache
+ ---> b3a01b3cab48
+Step 19/23 : COPY ./conf ./conf
+ ---> Using cache
+ ---> 9ecfcb13608d
+Step 20/23 : COPY ./data/options ./data/options
+ ---> Using cache
+ ---> 206bc630b05c
+Step 21/23 : COPY ./data/shp ./data/shp
+ ---> Using cache
+ ---> c2616d39d69e
+Step 22/23 : EXPOSE 3838
+ ---> Using cache
+ ---> 53f7715c8caa
+Step 23/23 : CMD ["R", "-e", "shiny::runApp('./R', host = '0.0.0.0', port = 3838)"]
+ ---> Using cache
+ ---> c8a8bb611441
+Successfully built c8a8bb611441
+Successfully tagged ic-shiny-app:latest
+eba5c61373782758bf5ebdeb2e79efa1e92c1b05f9deb8066a02badc512d3d53
+docker: Error response from daemon: driver failed programming external connectivity on endpoint friendly_wozniak (11f57120a222cb463bfa5fbfdaa494851b0b95cbe428e73c491985dbb155c65f): Bind for 0.0.0.0:3838 failed: port is already allocated.
+Using default tag: latest
+The push refers to repository [docker.io/guigo13/ic-shiny-app]
+ba8a902303e2: Preparing
+bc1d7594b4a2: Preparing
+95a6060d3bd5: Preparing
+926c8aaa3015: Preparing
+7df3b3aa6fed: Preparing
+8337de40ca23: Preparing
+bd92accdc25e: Preparing
+fdce96f2cc41: Preparing
+f02da1f8519b: Preparing
+92b09c54c79f: Preparing
+fd28ee1ce953: Preparing
+7e0b30789739: Preparing
+425aebf6c241: Preparing
+ecea86d4c82a: Preparing
+1bbe8218364f: Preparing
+23d5f658cc11: Preparing
+33c222e99694: Preparing
+fa4dac5af501: Preparing
+f2993114a5e0: Preparing
+a4778e90bcc9: Preparing
+8e5e03028587: Preparing
+9fbdaeca625e: Preparing
+346be19f13b0: Preparing
+935f303ebf75: Preparing
+bd92accdc25e: Waiting
+fdce96f2cc41: Waiting
+0e64bafdc7ee: Preparing
+425aebf6c241: Waiting
+ecea86d4c82a: Waiting
+92b09c54c79f: Waiting
+f02da1f8519b: Waiting
+7e0b30789739: Waiting
+9fbdaeca625e: Waiting
+1bbe8218364f: Waiting
+fa4dac5af501: Waiting
+f2993114a5e0: Waiting
+33c222e99694: Waiting
+fd28ee1ce953: Waiting
+a4778e90bcc9: Waiting
+935f303ebf75: Waiting
+0e64bafdc7ee: Waiting
+346be19f13b0: Waiting
+8337de40ca23: Waiting
+7df3b3aa6fed: Layer already exists
+95a6060d3bd5: Pushed
+bc1d7594b4a2: Pushed
+926c8aaa3015: Pushed
+8337de40ca23: Layer already exists
+bd92accdc25e: Layer already exists
+fdce96f2cc41: Layer already exists
+f02da1f8519b: Layer already exists
+92b09c54c79f: Layer already exists
+fd28ee1ce953: Layer already exists
+7e0b30789739: Layer already exists
+ecea86d4c82a: Layer already exists
+425aebf6c241: Layer already exists
+1bbe8218364f: Layer already exists
+23d5f658cc11: Layer already exists
+33c222e99694: Layer already exists
+fa4dac5af501: Layer already exists
+f2993114a5e0: Layer already exists
+8e5e03028587: Layer already exists
+a4778e90bcc9: Layer already exists
+346be19f13b0: Layer already exists
+935f303ebf75: Layer already exists
+9fbdaeca625e: Layer already exists
+0e64bafdc7ee: Layer already exists
+ba8a902303e2: Pushed
+latest: digest: sha256:c4aa4883867efae613c206bf8f0a3092f19c5c34012b6cf256d69863e9c61ce8 size: 5583
