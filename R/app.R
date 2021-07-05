@@ -15,7 +15,7 @@ source(file = "./tab_more.R")
 ui <- shiny::shinyUI(
   shiny::fluidPage(
     shiny::navbarPage(
-      title = "Complexity-Inequality v:0.72", 
+      title = "Complexity-Inequality v0.0.75", 
       id = "page_id", 
       selected = "app",
       
@@ -31,7 +31,6 @@ ui <- shiny::shinyUI(
           ),
         )
       ),
-      
       
       shiny::tabPanel(
         title = "App", 
@@ -63,7 +62,6 @@ ui <- shiny::shinyUI(
             shiny::fluidRow(
               shiny::tabsetPanel(
                 shiny::tabPanel(title = "Distribuição espacial", shiny::plotOutput(outputId = "plot1") %>% shinycssloaders::withSpinner()),
-                shiny::tabPanel(title = "geom_sf_interactive", ggiraph::girafeOutput(outputId = "plot2") %>% shinycssloaders::withSpinner()),
                 shiny::tabPanel(title = "Gráfico de densidade", shiny::plotOutput(outputId = "plot3") %>% shinycssloaders::withSpinner()),
                 shiny::tabPanel(title = "Tabela", shiny::fluidPage(br(), DT::dataTableOutput(outputId = "table1") %>% shinycssloaders::withSpinner()))
               )
@@ -111,7 +109,7 @@ server <- function(input, output){
   
   options(stringsAsFactors = F)
   
-  mongo_credentials <- config::get(file = "../conf/globalresources.yml")
+  mongo_credentials <- config::get(file = "../conf/credentials.yml")
   
   # Info dfs stored local or in mongoDB?????????????????? make one of unique options after db_mun and store in mongoDB
   # option_estados <- readr::read_csv("./data/options/option_estados.csv")
@@ -201,7 +199,7 @@ server <- function(input, output){
 
   reac_query <- shiny::eventReactive(input$goButton, {
     colec = paste0("colec_", input$input_server_2)
-    mongo_set <- mongolite::mongo(db = "db1", collection = colec, url = mongo_credentials$mongoURL, verbose = TRUE)
+    mongo_set <- mongolite::mongo(db = "db1", collection = colec, url = mongo_credentials$MongoDB$mongoURL, verbose = TRUE)
     df <- mongo_set$find(paste0('{"product" : ', paste0('"', input$input_server_4, '"'), ', "cd_year" : ', paste0('"', input$input_server_5, '"'), '}'))
     if(input$input_server_1!="BR"){ # melhorar com vars() depois
       df <- df %>%
@@ -224,23 +222,6 @@ server <- function(input, output){
       ggplot2::scale_fill_gradient(low="white", high="blue")+
       ggplot2::labs(title = "", caption = "", y = "Latitude", x = "Longitude")+
       ggplot2::theme_void()
-  })
-
-  output$plot2 <- ggiraph::renderGirafe({
-    dfr1 <- react_df()
-    rownames(dfr1) <- dfr1$cd_meso
-    gg2 <- ggplot2::ggplot(dfr1,
-      ggplot2::aes(
-        fill=dfr1$value,
-        tooltip=dfr1$cd_meso,
-        data_id=dfr1$cd_meso
-      )
-    )+
-      ggiraph::geom_sf_interactive(color="black", size=.2)+
-      ggplot2::scale_fill_gradient(low="white", high="blue")+
-      ggplot2::labs(title = "", caption = "", y = "Latitude", x = "Longitude")+
-      ggplot2::theme_void()
-    ggiraph::girafe(ggobj = gg2)
   })
 
   output$plot3 <- shiny::renderPlot({
