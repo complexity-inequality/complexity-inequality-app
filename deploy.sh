@@ -1,9 +1,9 @@
 #!/bin/sh
 
-echo "Running start.sh ..." # -------------------------------------------------
-echo "Please check start.log" # ------------------------------------------------
-exec > start.log 2>&1 # Start logging into start.log
-echo "" > start.log # Restart start.log
+echo "Running deploy.sh ..." # --------------------------------------------------
+echo "Please check deploy.log" # ------------------------------------------------
+exec > deploy.log 2>&1 # Start logging into start.log
+echo "" > deploy.log # Restart start.log
 
 echo "ls -a ------------------------------------------------------------------"
 cd /home/guigo/Documents/projects_dir/08-complexity-inequality/complexity-inequality-app
@@ -24,7 +24,7 @@ NM_DOCKER_USER="guigo13"
 PORT="3838"
 
 echo "Setting Credentials ----------------------------------------------------"
-DockerUser=$(grep 'DockerUser' conf/credentials.yml | cut -f2 -d':' |tr -d "'")
+DockerUser=$(grep 'DockerUser' conf/credentials.yml | cut -f2 -d':' |tr -d "'") # find out a better way to do it
 DockerPasswd=$(grep 'DockerPasswd' conf/credentials.yml | cut -f2 -d':' |tr -d "'")
 
 echo "docker build -----------------------------------------------------------"
@@ -41,13 +41,15 @@ docker run -d -p 3838:3838 --name $NM_CONTAINER $NM_IMAGE
 echo "docker push to dockerhub and gcp ---------------------------------------"
 docker tag $NM_IMAGE $NM_DOCKER_USER/$NM_IMAGE
 docker push $NM_DOCKER_USER/$NM_IMAGE
+echo "image pushed to dockerhub ----------------------------------------------"
 # make sure to have (gcloud auth configure-docker)
 docker tag $NM_DOCKER_USER/$NM_IMAGE gcr.io/$NM_GCP_PROJ_ID/$NM_IMAGE
 docker push gcr.io/$NM_GCP_PROJ_ID/$NM_IMAGE
+echo "image pushed to gcr ----------------------------------------------------"
 
 echo "deploy to gcp ----------------------------------------------------------"
 gcloud config set project $NM_GCP_PROJ_ID
 gcloud run deploy $NM_GCP_SERVICE --image=gcr.io/$NM_GCP_PROJ_ID/$NM_IMAGE --region=$NM_GCP_REGION --max-instances=$QT_MAX_INSTANCES --port=$PORT
 
-echo "Finished start.sh ------------------------------------------------------"
+echo "Finished deploy.sh ------------------------------------------------------"
 exec > /dev/tty 2>&1 #redirects out to controlling terminal

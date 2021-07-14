@@ -1,0 +1,26 @@
+tab_about <- shiny::tabPanel(
+  title = "About", 
+  value = "about",
+  shiny::column(width = 10, offset = 1,
+                shiny::br(),
+                shiny::h3(shiny::strong("NECODE - Center for Research on Complexity, Development, and Inequality")),
+                shiny::br(),
+                shiny::h4("Created in July 2021, the NECODE Center for Research on Complexity, Development, and Inequality at the Federal University of Santa Catarina makes use of new methods from network science, econometrics, and economic complexity to understand the challenges of smart diversification, inequality and inclusive growth in Brazil and across the world. NECODE views economies as complex evolving systems and explores the boundaries of economics with other disciplines, such as data science, geography, sociology, and innovation studies to get a better understanding of socioeconomic development processes and challenges in the digital age. NECODE collaborates with leading researchers from various countries and regions of Brazil on topics such as innovation, structural change and labor market dynamics, inequality and poverty dynamics, smart diversification, and economic catch-up processes. The NECODE web page allows users to map and download data on complexity, inequality, and socioeconomic development across Brazil and the world."),
+                shiny::br(),
+                shiny::h3(shiny::strong("Lines of research:")),
+                shiny::br(),
+                shiny::h4(shiny::strong("Economic complexity, institutions, and socioeconomic development. "), "This line of research combines new ways of measuring the quality of economic development with different theories in socioeconomic development."),
+                shiny::br(),
+                shiny::h4(shiny::strong("NECODE data lab and complexity explorer. "), "This line of research develops a web and data app that allows users to build custom analysis, map spatial distributions and download data on economic complexity, inequality, and socioeconomic development."),
+                shiny::br(),
+                shiny::h4(shiny::strong("Innovation, agglomeration, and structural change. "), "This line of research uses methods from econometrics, network science and geography to analyze innovation and structural change processes at the local and national level."),
+                shiny::br(),
+                shiny::h4(shiny::strong("Inequality, poverty, and social efficiency. "), "This line of research uses methods from development economics, sociology, network science, and operations research to map different types of inequality, multidimensional poverty, and social efficiency."),
+                shiny::br(),
+                shiny::h4(shiny::strong("Labor mobility networks and occupational dynamics. "), "This line of research uses methods from network science, economic sociology, and econometrics to create prediction models of occupation changes and explore the association between economic complexity, occupational mobility, and social mobility."),
+                shiny::br(),
+                shiny::h4(shiny::strong("Policies for smart, sustainable, and inclusive diversification. "), "This line of research synthesizes insights from all NECODE projects and makes use of methods from network science, economic complexity and simulation analysis to identify opportunities for smart, sustainable and inclusive diversification and growth."),
+                shiny::br(),
+                shiny::br()
+  )
+)

@@ -9,25 +9,43 @@ library(dplyr)
 # Insert logs
 
 source(file = "./tab_home.R")
-source(file = "./tab_sobre.R")
+source(file = "./tab_about.R")
 source(file = "./tab_more.R")
 
 ui <- shiny::shinyUI(
   shiny::fluidPage(
     shiny::navbarPage(
-      title = "Complexity-Inequality v0.0.75", 
+      title = "Complexity-Inequality v0.0.81", 
       id = "page_id", 
       selected = "app",
       
-      home,
+      shiny::tabPanel(
+        title = "Home", 
+        value = "home",
+        shiny::column(width = 10, offset = 1,
+                      shiny::br(),
+                      # print(getwd()),
+                      tags$img(src = "necode2image.png", width = "400px", height = "400px"),
+                      shiny::br(),
+                      shiny::h3("The Center for Research on Complexity, Development, and Inequality (CDI) at the Federal University of Santa Catarina makes use of new methods from network science, econometrics and economic complexity to understand the challenges of smart diversification, inequality and inclusive growth in Brazil and across the world."),
+                      shiny::br(),
+                      shiny::h3("Our team views economies as complex evolving systems and explores the boundaries of economics with other disciplines, such as data science, geography, and innovation studies to get a better understanding on dynamic socioeconomic development processes and challenges in the digital age."),
+                      shiny::br(),
+                      shiny::h3("We collaborate with leading researchers from various countries and regions of Brazil on topics such as innovation, structural change and labor market dynamics, inequality and poverty dynamics, and economic catch-up processes."),
+                      shiny::br(),
+                      shiny::h3("The complexity explorer application allows to map and download data on education, complexity, inequality and social efficiency values across Brazil and the world."),
+                      shiny::br(),
+                      shiny::h3("Welcome to CDI’s webpage, projects and applications.")
+        )
+      ),
       
       shiny::tabPanel(
-        title = "Membros",
+        title = "Members",
         value = "members",
         shiny::fluidPage(
           shiny::column(
             width = 10, offset = 1,
-            shiny::uiOutput(outputId = "members") %>% shinycssloaders::withSpinner()
+            shiny::uiOutput(outputId = "output_ui_members") %>% shinycssloaders::withSpinner()
           ),
         )
       ),
@@ -51,7 +69,7 @@ ui <- shiny::shinyUI(
               shiny::uiOutput(outputId = "input_ui_5"),
               shiny::br(),
               shiny::actionButton(
-                inputId = "goButton", width = "100%", strong("Processar"), #width = "320px",
+                inputId = "goButton", width = "100%", strong("Process"), #width = "320px",
                 style="display: inline-block; align-items: center;justify-content: center;float:center;padding-bottom:13px;border-radius: 30px;"
               )
             )
@@ -61,16 +79,16 @@ ui <- shiny::shinyUI(
             width = 7,
             shiny::fluidRow(
               shiny::tabsetPanel(
-                shiny::tabPanel(title = "Distribuição espacial", shiny::plotOutput(outputId = "plot1") %>% shinycssloaders::withSpinner()),
-                shiny::tabPanel(title = "Gráfico de densidade", shiny::plotOutput(outputId = "plot3") %>% shinycssloaders::withSpinner()),
-                shiny::tabPanel(title = "Tabela", shiny::fluidPage(br(), DT::dataTableOutput(outputId = "table1") %>% shinycssloaders::withSpinner()))
+                shiny::tabPanel(title = "Spatial distribution", shiny::plotOutput(outputId = "plot1") %>% shinycssloaders::withSpinner()),
+                shiny::tabPanel(title = "Density plot", shiny::plotOutput(outputId = "plot3") %>% shinycssloaders::withSpinner()),
+                shiny::tabPanel(title = "Tabel", shiny::fluidPage(br(), DT::dataTableOutput(outputId = "table1") %>% shinycssloaders::withSpinner()))
               )
             ),
             br(),
             shinydashboard::box(
-              title = "Informações adicionais", 
-              background = "light-blue", 
+              title = "Additional Information", 
               solidHeader = T, 
+              status = "primary",
               shiny::textOutput("info1")
             )
           ),
@@ -79,7 +97,7 @@ ui <- shiny::shinyUI(
       ),
 
       shiny::tabPanel(
-        title = "Publicações", 
+        title = "Publications", 
         value = "publications",
         shiny::fluidPage(
           shiny::column(
@@ -90,14 +108,16 @@ ui <- shiny::shinyUI(
       ),
       
       shiny::tabPanel(
-        title = "Metodologia", 
+        title = "Methodology", 
         value = "met",
         shiny::br(),
         shiny::h4("Here we are gonna explain the methodology, methods and tools used in the app and by the group")
       ),
       
-      more,
-      sobre
+      tab_more,
+      
+      tab_about
+      
     )
   )
 )
@@ -107,7 +127,10 @@ ui <- shiny::shinyUI(
 
 server <- function(input, output){
   
-  options(stringsAsFactors = F)
+  options(
+    stringsAsFactors = F, 
+    scipen = 666
+  )
   
   mongo_credentials <- config::get(file = "../conf/credentials.yml")
   
@@ -131,7 +154,7 @@ server <- function(input, output){
     names(choices1) <- option_loc %>% dplyr::select(nm_rg) %>% unique() %>% dplyr::pull()
     shinyWidgets::pickerInput(
       inputId = "input_server_1",
-      label = "Selecione a região",
+      label = "Select a region",
       choices = choices1,
       multiple = F,
       selected = choices1[1]
@@ -141,7 +164,7 @@ server <- function(input, output){
   output$input_ui_2 <- shiny::renderUI({
     shinyWidgets::pickerInput(
       inputId = "input_server_2",
-      label = "Selecione a divisão territorial",
+      label = "Select a territorial division",
       choices = list(
         "Estadual" = "uf",
         "Mesorregional" = "meso", 
@@ -159,7 +182,7 @@ server <- function(input, output){
     names(choices3) <- option_stats %>% dplyr::select(nm_tema) %>% unique() %>% dplyr::pull()
     shinyWidgets::pickerInput(
       inputId = "input_server_3",
-      label = "Selecione o tema",
+      label = "Select a theme",
       choices = choices3,
       multiple = FALSE,
       selected = "eci"
@@ -171,7 +194,7 @@ server <- function(input, output){
     names(choices4) <- option_stats %>% dplyr::filter(cd_tema==input$input_server_3) %>% dplyr::select(nm_stat) %>% dplyr::pull()
     shinyWidgets::pickerInput(
       inputId = "input_server_4",
-      label = "Selecione a estatística",
+      label = "Select a statistic",
       choices = choices4,
       multiple = FALSE,
       selected = choices4[2]
@@ -181,7 +204,7 @@ server <- function(input, output){
   output$input_ui_5 <- shiny::renderUI({
     shinyWidgets::pickerInput(
       inputId = "input_server_5",
-      label = "Selecione o período",
+      label = "Select the period",
       choices = c(as.character(1997:2021), "1997-2021"),
       multiple = FALSE,
       selected = "1997-2021"
@@ -214,7 +237,7 @@ server <- function(input, output){
       reac_shp()
     ) %>% sf::st_sf()
   })
-
+  
   output$plot1 <- shiny::renderPlot({
     ggplot2::ggplot(react_df())+
       # ggplot2::geom_sf(ggplot2::aes(0), color="black", size=.13)+
@@ -247,31 +270,72 @@ server <- function(input, output){
     reac_query()
   })
   
-  output$members <- shiny::renderUI({
+  output$output_ui_members <- shiny::renderUI({
     bios <- readr::read_csv("../data/options/bios.csv")
-    lapply(1:nrow(bios), function(i) {
-      shiny::div(
-        shiny::h3(bios[i, "nm"]), 
-        shiny::h5(bios[i, "en_title"]),
-        shiny::h6(bios[i, "en_desc"]),
-        shiny::br()
-      )
-    })
+    list_members <- function(i) {
+      if(i==1){
+        shiny::div(
+          shiny::h3(shiny::strong("Current director of the CDI")),
+          shiny::h4(shiny::strong(bios[i, "nm"]), bios[i, "en_desc"]), 
+          shiny::br()
+        )
+      } else
+      if(i==2){
+          shiny::div(
+            shiny::h3(shiny::strong("Tech lead and webpage designer")),
+            shiny::h4(shiny::strong(bios[i, "nm"]), bios[i, "en_desc"]), 
+            shiny::br()
+          )
+        } else
+        if(i==3){
+            shiny::div(
+              shiny::h3(shiny::strong("Algorithim's mage")),
+              shiny::h4(shiny::strong(bios[i, "nm"]), bios[i, "en_desc"]), 
+              shiny::br()
+            )
+          } else
+        if(i==4){
+        shiny::div(
+          shiny::h3(shiny::strong("Affiliated Professors at the Federal University of Santa Catarina")),
+          shiny::h4(shiny::strong(bios[i, "nm"]), bios[i, "en_desc"]), 
+          shiny::br()
+        )
+      } else
+        if(i==7){
+          shiny::div(
+            shiny::h3(shiny::strong("Main external collaborators")),
+            shiny::h4(shiny::strong(bios[i, "nm"]), bios[i, "en_desc"]), 
+            shiny::br()
+          )
+        } else
+        if(i==10){
+            shiny::div(
+              shiny::h3(shiny::strong("Young researchers")),
+              shiny::h4(shiny::strong(bios[i, "nm"]), bios[i, "en_desc"]), 
+              shiny::br()
+            )
+        } else {
+          shiny::div(
+            shiny::h4(shiny::strong(bios[i, "nm"]), bios[i, "en_desc"]), 
+            shiny::br()
+            )
+          }
+    }
+    lapply(1:nrow(bios), list_members)
   })
   
   output$publications_ui <- shiny::renderUI({
     publications <- readr::read_csv("../data/options/publications.csv")
     lapply(1:nrow(publications), function(i) {
       shiny::div(
-        shiny::h3(publications[i, "title"]), 
-        shiny::h5(publications[i, "year"]), 
-        shiny::h5(publications[i, "authors"]),
+        shiny::h4(shiny::strong(publications[i, "title"])), 
+        # shiny::h5(publications[i, "year"]), 
+        # shiny::h5(publications[i, "authors"]),
         shiny::h6(publications[i, "citation"]),
         shiny::br()
       )
     })
   })
-  
   
 }
 

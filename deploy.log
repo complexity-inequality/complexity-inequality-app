@@ -6,6 +6,8 @@ code
 complexity-inequality-app.Rproj
 conf
 data
+deploy.log
+deploy.sh
 dockerfile
 .git
 .gitignore
@@ -14,12 +16,9 @@ README.md
 README.txt
 .Rhistory
 .Rproj.user
-start.log
-start.sh
 www
 docker ps --------------------------------------------------------------
-CONTAINER ID   IMAGE          COMMAND   CREATED       STATUS             PORTS                                       NAMES
-67ffba66d602   e0bffb4797a0   "/init"   4 weeks ago   Up About an hour   0.0.0.0:8787->8787/tcp, :::8787->8787/tcp   rstudio_container_sp
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
 Setting Global variables -----------------------------------------------
 Setting Credentials ----------------------------------------------------
 docker build -----------------------------------------------------------
@@ -81,35 +80,35 @@ Step 17/23 : RUN R -e "install.packages(c('DT'))"
  ---> Using cache
  ---> 0c0e7425f1f4
 Step 18/23 : COPY ./R ./R
- ---> 186e6695e3c1
+ ---> aa5224effef8
 Step 19/23 : COPY ./conf ./conf
- ---> 599b69eb7980
+ ---> f3d1d49c94b2
 Step 20/23 : COPY ./data/options ./data/options
- ---> 23256042f5c2
+ ---> 302838857970
 Step 21/23 : COPY ./data/shp ./data/shp
- ---> 637b431ef5b8
+ ---> 8f2708e8713d
 Step 22/23 : EXPOSE 3838
- ---> Running in 8188208f8f5c
-Removing intermediate container 8188208f8f5c
- ---> aa648f728453
+ ---> Running in 822f8da6e2be
+Removing intermediate container 822f8da6e2be
+ ---> 789a43218dfe
 Step 23/23 : CMD ["R", "-e", "shiny::runApp('./R', host = '0.0.0.0', port = 3838)"]
- ---> Running in f06cdd9f89fa
-Removing intermediate container f06cdd9f89fa
- ---> 5e8d15d418a5
-Successfully built 5e8d15d418a5
+ ---> Running in e247340473e0
+Removing intermediate container e247340473e0
+ ---> c9a4a7b78621
+Successfully built c9a4a7b78621
 Successfully tagged ci-app-img:latest
 docker stop & rm previous container ------------------------------------
 ci-app-ctn
 ci-app-ctn
 docker run ci-app-ctn -----------------------------------------------
-562bdc3f7eba75bc45bc5ce840510a78542e2cf9f4fbb7eda17a681b449b4427
+c9743a6ee186286c9c78fd5c201a9a50aae78ecdba81085b2f81540f6a85bde2
 docker push to dockerhub and gcp ---------------------------------------
 Using default tag: latest
 The push refers to repository [docker.io/guigo13/ci-app-img]
-b0251b442898: Preparing
-abfd15879863: Preparing
-3c6489848e94: Preparing
-add57906d817: Preparing
+bdefe7bf06ab: Preparing
+0454c452592d: Preparing
+0a2f79e9850c: Preparing
+a685d88b35df: Preparing
 7df3b3aa6fed: Preparing
 8337de40ca23: Preparing
 bd92accdc25e: Preparing
@@ -131,125 +130,133 @@ a4778e90bcc9: Preparing
 346be19f13b0: Preparing
 935f303ebf75: Preparing
 0e64bafdc7ee: Preparing
-8337de40ca23: Waiting
-425aebf6c241: Waiting
+bd92accdc25e: Waiting
 fdce96f2cc41: Waiting
-bd92accdc25e: Waiting
-ecea86d4c82a: Waiting
 f02da1f8519b: Waiting
-9fbdaeca625e: Waiting
-fd28ee1ce953: Waiting
-a4778e90bcc9: Waiting
-1bbe8218364f: Waiting
-7e0b30789739: Waiting
-346be19f13b0: Waiting
-f2993114a5e0: Waiting
-935f303ebf75: Waiting
 92b09c54c79f: Waiting
-7df3b3aa6fed: Layer already exists
-8337de40ca23: Layer already exists
-bd92accdc25e: Layer already exists
-fdce96f2cc41: Layer already exists
-add57906d817: Pushed
-abfd15879863: Pushed
-f02da1f8519b: Layer already exists
-3c6489848e94: Pushed
-92b09c54c79f: Layer already exists
-fd28ee1ce953: Layer already exists
-7e0b30789739: Layer already exists
-425aebf6c241: Layer already exists
-ecea86d4c82a: Layer already exists
-1bbe8218364f: Layer already exists
-33c222e99694: Layer already exists
-23d5f658cc11: Layer already exists
-f2993114a5e0: Layer already exists
-fa4dac5af501: Layer already exists
-a4778e90bcc9: Layer already exists
-8e5e03028587: Layer already exists
-346be19f13b0: Layer already exists
-935f303ebf75: Layer already exists
-0e64bafdc7ee: Layer already exists
-9fbdaeca625e: Layer already exists
-b0251b442898: Pushed
-latest: digest: sha256:691b9aca79c3667650e6ba35a2baa99ea5cbc815ec42c8a4b4e2cb9728e1cd9c size: 5583
-Using default tag: latest
-The push refers to repository [gcr.io/ci-gcp-proj/ci-app-img]
-b0251b442898: Preparing
-abfd15879863: Preparing
-3c6489848e94: Preparing
-add57906d817: Preparing
-7df3b3aa6fed: Preparing
-8337de40ca23: Preparing
-bd92accdc25e: Preparing
-fdce96f2cc41: Preparing
-f02da1f8519b: Preparing
-92b09c54c79f: Preparing
-fd28ee1ce953: Preparing
-7e0b30789739: Preparing
-425aebf6c241: Preparing
-ecea86d4c82a: Preparing
-1bbe8218364f: Preparing
-23d5f658cc11: Preparing
-33c222e99694: Preparing
+fd28ee1ce953: Waiting
 8337de40ca23: Waiting
-fa4dac5af501: Preparing
-f2993114a5e0: Preparing
-fd28ee1ce953: Waiting
-bd92accdc25e: Waiting
-a4778e90bcc9: Preparing
-8e5e03028587: Preparing
-92b09c54c79f: Waiting
-9fbdaeca625e: Preparing
-346be19f13b0: Preparing
-7e0b30789739: Waiting
-935f303ebf75: Preparing
-0e64bafdc7ee: Preparing
-1bbe8218364f: Waiting
 425aebf6c241: Waiting
+ecea86d4c82a: Waiting
+1bbe8218364f: Waiting
 23d5f658cc11: Waiting
 33c222e99694: Waiting
-ecea86d4c82a: Waiting
-9fbdaeca625e: Waiting
 fa4dac5af501: Waiting
-f2993114a5e0: Waiting
-346be19f13b0: Waiting
+9fbdaeca625e: Waiting
 a4778e90bcc9: Waiting
-935f303ebf75: Waiting
+346be19f13b0: Waiting
 8e5e03028587: Waiting
-f02da1f8519b: Waiting
+935f303ebf75: Waiting
+7e0b30789739: Waiting
+f2993114a5e0: Waiting
+0e64bafdc7ee: Waiting
 7df3b3aa6fed: Layer already exists
 8337de40ca23: Layer already exists
 bd92accdc25e: Layer already exists
 fdce96f2cc41: Layer already exists
+0454c452592d: Pushed
+a685d88b35df: Pushed
 f02da1f8519b: Layer already exists
-add57906d817: Pushed
-fd28ee1ce953: Layer already exists
+0a2f79e9850c: Pushed
 92b09c54c79f: Layer already exists
-3c6489848e94: Pushed
-abfd15879863: Pushed
-7e0b30789739: Layer already exists
 425aebf6c241: Layer already exists
-23d5f658cc11: Layer already exists
+fd28ee1ce953: Layer already exists
+7e0b30789739: Layer already exists
 ecea86d4c82a: Layer already exists
 1bbe8218364f: Layer already exists
-33c222e99694: Layer already exists
+23d5f658cc11: Layer already exists
 fa4dac5af501: Layer already exists
-9fbdaeca625e: Layer already exists
+33c222e99694: Layer already exists
+f2993114a5e0: Layer already exists
 a4778e90bcc9: Layer already exists
 8e5e03028587: Layer already exists
-f2993114a5e0: Layer already exists
+9fbdaeca625e: Layer already exists
 935f303ebf75: Layer already exists
 346be19f13b0: Layer already exists
 0e64bafdc7ee: Layer already exists
-b0251b442898: Pushed
-latest: digest: sha256:691b9aca79c3667650e6ba35a2baa99ea5cbc815ec42c8a4b4e2cb9728e1cd9c size: 5583
+bdefe7bf06ab: Pushed
+latest: digest: sha256:b94309f78e416456e9bfcb55b5a9a7dbe4ac959c4e1585ea75e9cd4338af7aa6 size: 5584
+image pushed to dockerhub ----------------------------------------------
+Using default tag: latest
+The push refers to repository [gcr.io/ci-gcp-proj/ci-app-img]
+bdefe7bf06ab: Preparing
+0454c452592d: Preparing
+0a2f79e9850c: Preparing
+a685d88b35df: Preparing
+7df3b3aa6fed: Preparing
+8337de40ca23: Preparing
+bd92accdc25e: Preparing
+fdce96f2cc41: Preparing
+f02da1f8519b: Preparing
+92b09c54c79f: Preparing
+fd28ee1ce953: Preparing
+7e0b30789739: Preparing
+425aebf6c241: Preparing
+ecea86d4c82a: Preparing
+92b09c54c79f: Waiting
+8337de40ca23: Waiting
+7e0b30789739: Waiting
+fd28ee1ce953: Waiting
+425aebf6c241: Waiting
+fdce96f2cc41: Waiting
+f02da1f8519b: Waiting
+1bbe8218364f: Preparing
+23d5f658cc11: Preparing
+33c222e99694: Preparing
+fa4dac5af501: Preparing
+ecea86d4c82a: Waiting
+1bbe8218364f: Waiting
+33c222e99694: Waiting
+23d5f658cc11: Waiting
+f2993114a5e0: Preparing
+a4778e90bcc9: Preparing
+8e5e03028587: Preparing
+9fbdaeca625e: Preparing
+346be19f13b0: Preparing
+935f303ebf75: Preparing
+8e5e03028587: Waiting
+a4778e90bcc9: Waiting
+0e64bafdc7ee: Preparing
+fa4dac5af501: Waiting
+9fbdaeca625e: Waiting
+f2993114a5e0: Waiting
+346be19f13b0: Waiting
+0e64bafdc7ee: Waiting
+935f303ebf75: Waiting
+7df3b3aa6fed: Layer already exists
+8337de40ca23: Layer already exists
+bd92accdc25e: Layer already exists
+fdce96f2cc41: Layer already exists
+0454c452592d: Pushed
+f02da1f8519b: Layer already exists
+0a2f79e9850c: Pushed
+a685d88b35df: Pushed
+fd28ee1ce953: Layer already exists
+92b09c54c79f: Layer already exists
+7e0b30789739: Layer already exists
+425aebf6c241: Layer already exists
+ecea86d4c82a: Layer already exists
+1bbe8218364f: Layer already exists
+23d5f658cc11: Layer already exists
+33c222e99694: Layer already exists
+fa4dac5af501: Layer already exists
+f2993114a5e0: Layer already exists
+a4778e90bcc9: Layer already exists
+8e5e03028587: Layer already exists
+9fbdaeca625e: Layer already exists
+346be19f13b0: Layer already exists
+935f303ebf75: Layer already exists
+0e64bafdc7ee: Layer already exists
+bdefe7bf06ab: Pushed
+latest: digest: sha256:b94309f78e416456e9bfcb55b5a9a7dbe4ac959c4e1585ea75e9cd4338af7aa6 size: 5584
+image pushed to gcr ----------------------------------------------------
 deploy to gcp ----------------------------------------------------------
 Updated property [core/project].
 Deploying container to Cloud Run service [[1mci-app-run[m] in project [[1mci-gcp-proj[m] region [[1mus-central1[m]
 Deploying...
-Creating Revision............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................done
-Routing traffic................................................done
+Creating Revision..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................done
+Routing traffic...................................................................done
 Done.
-Service [[1mci-app-run[m] revision [[1mci-app-run-00009-tah[m] has been deployed and is serving [1m100[m percent of traffic.
+Service [[1mci-app-run[m] revision [[1mci-app-run-00012-ras[m] has been deployed and is serving [1m100[m percent of traffic.
 Service URL: [1mhttps://ci-app-run-3e64vfsf5q-uc.a.run.app[m
-Finished start.sh ------------------------------------------------------
+Finished deploy.sh ------------------------------------------------------
