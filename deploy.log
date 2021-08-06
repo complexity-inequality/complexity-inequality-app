@@ -28,7 +28,8 @@ Configure a credential helper to remove this warning. See
 https://docs.docker.com/engine/reference/commandline/login/#credentials-store
 
 Login Succeeded
-Sending build context to Docker daemon  6.939GB
+Sending build context to Docker daemon  6.939GB
+
 Step 1/23 : FROM rocker/shiny:latest
  ---> a700fbae0c61
 Step 2/23 : LABEL mantainer=guilhermeviegas1993@gmail.com
@@ -252,11 +253,11 @@ latest: digest: sha256:b94309f78e416456e9bfcb55b5a9a7dbe4ac959c4e1585ea75e9cd433
 image pushed to gcr ----------------------------------------------------
 deploy to gcp ----------------------------------------------------------
 Updated property [core/project].
-Deploying container to Cloud Run service [[1mci-app-run[m] in project [[1mci-gcp-proj[m] region [[1mus-central1[m]
+Deploying container to Cloud Run service [[1mci-app-run[m] in project [[1mci-gcp-proj[m] region [[1mus-central1[m]
 Deploying...
 Creating Revision..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................done
 Routing traffic...................................................................done
 Done.
-Service [[1mci-app-run[m] revision [[1mci-app-run-00012-ras[m] has been deployed and is serving [1m100[m percent of traffic.
-Service URL: [1mhttps://ci-app-run-3e64vfsf5q-uc.a.run.app[m
+Service [[1mci-app-run[m] revision [[1mci-app-run-00012-ras[m] has been deployed and is serving [1m100[m percent of traffic.
+Service URL: [1mhttps://ci-app-run-3e64vfsf5q-uc.a.run.app[m
 Finished deploy.sh ------------------------------------------------------

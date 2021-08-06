@@ -2,9 +2,10 @@
 
 echo "Running deploy.sh ..." # --------------------------------------------------
 echo "Please check deploy.log" # ------------------------------------------------
-exec > deploy.log 2>&1 # Start logging into start.log
-echo "" > deploy.log # Restart start.log
+exec > deploy.log 2>&1 # Start logging into deploy.log
+echo "" > deploy.log # Restart deploy.log
 
+echo `date`
 echo "ls -a ------------------------------------------------------------------"
 cd /home/guigo/Documents/projects_dir/08-complexity-inequality/complexity-inequality-app
 pwd
